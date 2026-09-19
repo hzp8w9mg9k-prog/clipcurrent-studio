@@ -1,79 +1,81 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070a10">
-<link rel="manifest" href="/manifest.webmanifest">
-<title>ClipCurrent Studio</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#070a10">
+<link rel="manifest" href="/manifest.webmanifest"><title>ClipCurrent Studio</title>
 <style>
 :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f7f7fb;background:#070a10}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 60% 0,#142338 0,#090d15 35%,#06080d 70%);min-height:100vh}
-main{max-width:980px;margin:auto;padding:18px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:10px}.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-weight:900;background:linear-gradient(145deg,#1e8fff,#6de0ff);color:#07111c}.muted{color:#91a0b4}.pill{padding:8px 12px;border-radius:999px;background:#102238;border:1px solid #244d78;color:#9ed5ff;font-size:12px}.hero,.card{border:1px solid #1d293d;background:#0c121cdd;border-radius:22px;padding:18px;margin-top:14px}.hero{padding:28px}.hero h1{font-size:clamp(36px,7vw,64px);margin:8px 0 12px;line-height:1}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.box{padding:14px;border-radius:14px;background:#0a131f;border:1px solid #20314a}.ok{color:#aeeac4}.need{color:#ffd59a}.tiny{font-size:12px;color:#8290a4;line-height:1.5}.account{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.btn{border:1px solid #2f5f89;background:#0d2033;color:#cce8ff;padding:10px 13px;border-radius:12px;font-weight:800;cursor:pointer}.btn:disabled{opacity:.55}.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}.step{padding:10px 8px;border-radius:12px;background:#0d2017;border:1px solid #275b3c;color:#aeeac4;text-align:center;font-size:11px}.trendlist{display:grid;gap:10px;margin-top:14px}.trend{padding:14px;border-radius:14px;background:#0a131f;border:1px solid #20314a}.trendtop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.trend h3{margin:0;font-size:16px}.signal{display:inline-block;margin-top:7px;padding:4px 7px;border-radius:999px;background:#102238;border:1px solid #244d78;color:#9ed5ff;font-size:11px}.rights{color:#ffd59a;font-size:11px;margin-top:8px}.error{color:#ffb8b8}@media(max-width:760px){.grid{grid-template-columns:1fr}.steps{grid-template-columns:repeat(3,1fr)}}
-</style>
-</head>
-<body>
-<main>
-  <div class="top"><div class="brand"><div class="logo">C▶</div><div><b>ClipCurrent</b><div class="tiny">STUDIO</div></div></div><span class="pill">Instagram • Reels only</span></div>
-  <section class="hero"><div class="tiny">YOUR MOVIE-CLIP ENGINE</div><h1>Find. Clip. Learn.</h1><p class="muted">ClipCurrent researches current movie attention, checks source eligibility, scores scenes, creates vertical Reel candidates, and learns what performs.</p></section>
+main{max-width:980px;margin:auto;padding:18px}.top,.account,.budgettop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:10px}.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-weight:900;background:linear-gradient(145deg,#1e8fff,#6de0ff);color:#07111c}.muted{color:#91a0b4}.pill{padding:8px 12px;border-radius:999px;background:#102238;border:1px solid #244d78;color:#9ed5ff;font-size:12px}.hero,.card{border:1px solid #1d293d;background:#0c121cdd;border-radius:22px;padding:18px;margin-top:14px}.hero{padding:28px}.hero h1{font-size:clamp(36px,7vw,64px);margin:8px 0 12px;line-height:1}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.box{padding:14px;border-radius:14px;background:#0a131f;border:1px solid #20314a}.ok{color:#aeeac4}.need{color:#ffd59a}.tiny{font-size:12px;color:#8290a4;line-height:1.5}.btn{border:1px solid #2f5f89;background:#0d2033;color:#cce8ff;padding:10px 13px;border-radius:12px;font-weight:800;cursor:pointer}.btn:disabled{opacity:.55}.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}.step{padding:10px 8px;border-radius:12px;background:#0d2017;border:1px solid #275b3c;color:#aeeac4;text-align:center;font-size:11px}.trendlist{display:grid;gap:10px;margin-top:14px}.trend{padding:14px;border-radius:14px;background:#0a131f;border:1px solid #20314a}.trend h3{margin:0;font-size:16px}.signal{display:inline-block;margin-top:7px;padding:4px 7px;border-radius:999px;background:#102238;border:1px solid #244d78;color:#9ed5ff;font-size:11px}.rights{color:#ffd59a;font-size:11px;margin-top:8px}.error{color:#ffb8b8}.meter{height:12px;background:#080d14;border:1px solid #20314a;border-radius:999px;overflow:hidden;margin-top:10px}.meterfill{height:100%;width:0;background:linear-gradient(90deg,#4db3ff,#79e3b7)}.budgetnum{font-size:28px;font-weight:900}.warn{color:#ffd59a}.stop{color:#ff9d9d}.budgetedit{background:#08111d;border:1px solid #24364d;color:white;border-radius:10px;padding:9px;width:90px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.steps{grid-template-columns:repeat(3,1fr)}}
+</style></head>
+<body><main>
+<div class="top"><div class="brand"><div class="logo">C▶</div><div><b>ClipCurrent</b><div class="tiny">STUDIO</div></div></div><span class="pill">Instagram • Reels only</span></div>
+<section class="hero"><div class="tiny">YOUR MOVIE-CLIP ENGINE</div><h1>Find. Clip. Learn.</h1><p class="muted">Research current movie attention, check source eligibility, score scenes, create vertical Reel candidates, and learn what performs.</p></section>
 
-  <section class="card">
-    <div class="account"><div><div class="tiny">ACTIVE ACCOUNT</div><h2 style="margin:4px 0">@clip.currentdaily</h2><div class="muted">Movies • Primary account</div></div><button class="btn" onclick="document.getElementById('add').hidden=!document.getElementById('add').hidden">＋ Add New Account</button></div>
-    <div id="add" hidden class="box" style="margin-top:12px"><b>Add New Account</b><p class="tiny">Future accounts keep separate trend feeds, source rules, Reel queues, analytics, and learning profiles.</p><select style="width:100%;padding:10px;border-radius:10px;background:#08111d;color:white;border:1px solid #24364d"><option>Gaming</option><option>Comedy / Podcasts</option><option>Mystery / True Crime</option><option>Business / Money</option><option>Custom</option></select></div>
-  </section>
+<section class="card">
+<div class="account"><div><div class="tiny">ACTIVE ACCOUNT</div><h2 style="margin:4px 0">@clip.currentdaily</h2><div class="muted">Movies • Primary account</div></div><button class="btn" onclick="document.getElementById('add').hidden=!document.getElementById('add').hidden">＋ Add New Account</button></div>
+<div id="add" hidden class="box" style="margin-top:12px"><b>Add New Account</b><p class="tiny">Future accounts keep separate trend feeds, source rules, Reel queues, analytics, and learning profiles.</p><select style="width:100%;padding:10px;border-radius:10px;background:#08111d;color:white;border:1px solid #24364d"><option>Gaming</option><option>Comedy / Podcasts</option><option>Mystery / True Crime</option><option>Business / Money</option><option>Custom</option></select></div>
+</section>
 
-  <section class="card">
-    <div class="account"><div><h2 style="margin:0">Live Trend Scout</h2><div class="tiny">Uses current web research. Trending does not mean footage is cleared for reuse.</div></div><button id="trendBtn" class="btn" onclick="loadTrends()">Research Now</button></div>
-    <div id="trendStatus" class="tiny" style="margin-top:10px">Tap Research Now to find current movie opportunities.</div>
-    <div id="trendList" class="trendlist"></div>
-  </section>
+<section class="card">
+<div class="budgettop"><div><div class="tiny">MONTHLY AI BUDGET</div><div class="budgetnum"><span id="spent">$0.00</span> <span class="muted" style="font-size:16px">/ $<span id="budgetLabel">15.00</span></span></div></div><div><label class="tiny">Budget USD</label><br><input id="budgetInput" class="budgetedit" type="number" min="1" step="1" value="15"><button class="btn" onclick="saveBudget()">Save</button></div></div>
+<div class="meter"><div id="meterFill" class="meterfill"></div></div>
+<div id="budgetMessage" class="tiny" style="margin-top:8px">Warning at $10. Trend research pauses automatically at your monthly budget on this device.</div>
+</section>
 
-  <section class="card">
-    <h2>Automation Pipeline</h2>
-    <div class="steps"><div class="step">1<br>Trend</div><div class="step">2<br>Rights</div><div class="step">3<br>Ingest</div><div class="step">4<br>Transcript</div><div class="step">5<br>Rank</div><div class="step">6<br>Render</div></div>
-    <p class="tiny">Production hosting and transcription credentials are live. Trend Scout now has a real server-side research endpoint.</p>
-  </section>
+<section class="card">
+<div class="account"><div><h2 style="margin:0">Live Trend Scout</h2><div class="tiny">Current web research. Trending does not mean footage is cleared for reuse.</div></div><button id="trendBtn" class="btn" onclick="loadTrends()">Research Now</button></div>
+<div id="trendStatus" class="tiny" style="margin-top:10px">Tap Research Now to find current movie opportunities.</div><div id="trendList" class="trendlist"></div>
+</section>
 
-  <section class="card">
-    <h2>Production Readiness</h2>
-    <div class="grid">
-      <div class="box"><b class="ok">✓ Separate GitHub repository</b><div class="tiny">hzp8w9mg9k-prog/clipcurrent-studio</div></div>
-      <div class="box"><b class="ok">✓ Vercel production</b><div class="tiny">clipcurrent-studio.vercel.app</div></div>
-      <div class="box"><b class="ok">✓ OpenAI server secret</b><div class="tiny">Configured server-side</div></div>
-      <div class="box"><b class="ok">✓ Live Trend Scout API</b><div class="tiny">Current web research via server endpoint</div></div>
-    </div>
-  </section>
+<section class="card"><h2>Automation Pipeline</h2><div class="steps"><div class="step">1<br>Trend</div><div class="step">2<br>Rights</div><div class="step">3<br>Ingest</div><div class="step">4<br>Transcript</div><div class="step">5<br>Rank</div><div class="step">6<br>Render</div></div><p class="tiny">Production hosting and transcription credentials are live. Trend Scout tracks estimated API cost per run.</p></section>
+
+<section class="card"><h2>Production Readiness</h2><div class="grid"><div class="box"><b class="ok">✓ GitHub + Vercel</b><div class="tiny">Production deployment connected</div></div><div class="box"><b class="ok">✓ OpenAI server secret</b><div class="tiny">Configured server-side</div></div><div class="box"><b class="ok">✓ Cost-aware Trend Scout</b><div class="tiny">Usage estimate returned per research run</div></div><div class="box"><b class="need">Persistent account-wide billing guard</b><div class="tiny">Current $15 guard is stored on this device until database storage is added</div></div></div></section>
 </main>
 <script>
-async function loadTrends(){
-  const btn=document.getElementById("trendBtn");
-  const status=document.getElementById("trendStatus");
-  const list=document.getElementById("trendList");
-  btn.disabled=true; btn.textContent="Researching…";
-  status.textContent="Searching current movie attention and ranking short-form opportunities…";
-  list.innerHTML="";
-  try{
-    const r=await fetch("/api/trends");
-    const data=await r.json();
-    if(!r.ok || !data.ok) throw new Error(data.error||"Trend research failed");
-    status.textContent="Research updated "+new Date(data.researchedAt).toLocaleString();
-    for(const t of data.trends){
-      const card=document.createElement("div"); card.className="trend";
-      const top=document.createElement("div"); top.className="trendtop";
-      const title=document.createElement("h3"); title.textContent=t.title||"Movie trend";
-      top.appendChild(title); card.appendChild(top);
-      const signal=document.createElement("span"); signal.className="signal"; signal.textContent=t.signal||"Current attention"; card.appendChild(signal);
-      const why=document.createElement("p"); why.className="tiny"; why.textContent=t.why||""; card.appendChild(why);
-      const angle=document.createElement("p"); angle.className="tiny"; angle.innerHTML="<b>Reel angle:</b> "; angle.appendChild(document.createTextNode(t.clip_angle||"")); card.appendChild(angle);
-      const rights=document.createElement("div"); rights.className="rights"; rights.textContent="⚠ Rights/source check required before footage is used."; card.appendChild(rights);
-      list.appendChild(card);
-    }
-  }catch(e){
-    status.innerHTML='<span class="error">'+e.message+'</span>';
-  }finally{
-    btn.disabled=false; btn.textContent="Research Now";
-  }
+const monthKey=()=>new Date().toISOString().slice(0,7);
+const storageKey=()=> "clipcurrentCost-"+monthKey();
+function getSpent(){return Number(localStorage.getItem(storageKey())||0)}
+function getBudget(){return Number(localStorage.getItem("clipcurrentMonthlyBudget")||15)}
+function saveBudget(){
+  const v=Math.max(1,Number(document.getElementById("budgetInput").value||15));
+  localStorage.setItem("clipcurrentMonthlyBudget",String(v)); renderBudget();
 }
-</script>
-</body>
-</html>
+function addSpend(v){
+  const next=getSpent()+Number(v||0); localStorage.setItem(storageKey(),String(next)); renderBudget();
+}
+function renderBudget(){
+  const spent=getSpent(), budget=getBudget(), warning=Math.min(10,budget*0.67);
+  document.getElementById("spent").textContent="$"+spent.toFixed(2);
+  document.getElementById("budgetLabel").textContent=budget.toFixed(2);
+  document.getElementById("budgetInput").value=budget;
+  document.getElementById("meterFill").style.width=Math.min(100,(spent/budget)*100)+"%";
+  const msg=document.getElementById("budgetMessage");
+  const btn=document.getElementById("trendBtn");
+  if(spent>=budget){msg.className="tiny stop";msg.textContent="Monthly budget reached. Optional Trend Scout research is paused until next month or until you raise the budget.";btn.disabled=true;}
+  else if(spent>=warning){msg.className="tiny warn";msg.textContent="Budget warning: you are approaching your $"+budget.toFixed(2)+" monthly limit.";btn.disabled=false;}
+  else{msg.className="tiny";msg.textContent="Warning near $"+warning.toFixed(2)+". Trend research pauses automatically at $"+budget.toFixed(2)+" on this device.";btn.disabled=false;}
+}
+async function loadTrends(){
+  const btn=document.getElementById("trendBtn"),status=document.getElementById("trendStatus"),list=document.getElementById("trendList");
+  if(getSpent()>=getBudget()){renderBudget();return;}
+  btn.disabled=true;btn.textContent="Researching…";status.textContent="Searching current movie attention and ranking short-form opportunities…";list.innerHTML="";
+  try{
+    const r=await fetch("/api/trends",{cache:"no-store"}); const data=await r.json();
+    if(!r.ok||!data.ok) throw new Error(data.error||"Trend research failed");
+    addSpend(data.cost?.estimatedCostUsd||0);
+    status.textContent="Research updated "+new Date(data.researchedAt).toLocaleString()+" • est. run cost $"+Number(data.cost?.estimatedCostUsd||0).toFixed(4);
+    for(const t of data.trends){
+      const card=document.createElement("div");card.className="trend";
+      const title=document.createElement("h3");title.textContent=t.title||"Movie trend";card.appendChild(title);
+      const signal=document.createElement("span");signal.className="signal";signal.textContent=t.signal||"Current attention";card.appendChild(signal);
+      const why=document.createElement("p");why.className="tiny";why.textContent=t.why||"";card.appendChild(why);
+      const angle=document.createElement("p");angle.className="tiny";angle.innerHTML="<b>Reel angle:</b> ";angle.appendChild(document.createTextNode(t.clip_angle||""));card.appendChild(angle);
+      const rights=document.createElement("div");rights.className="rights";rights.textContent="⚠ Rights/source check required before footage is used.";card.appendChild(rights);list.appendChild(card);
+    }
+  }catch(e){status.innerHTML='<span class="error">'+e.message+'</span>';}
+  finally{btn.textContent="Research Now";renderBudget();}
+}
+renderBudget();
+</script></body></html>
