@@ -1,14 +1,19 @@
 export default function handler(req,res){
+  const hasOpenAIKey=typeof process.env.OPENAI_API_KEY==="string" && process.env.OPENAI_API_KEY.trim().length>0;
   res.status(200).json({
     ok:true,
     app:"ClipCurrent Studio",
     account:"@clip.currentdaily",
     niche:"Movies",
+    environment:process.env.VERCEL_ENV || "unknown",
+    diagnostics:{
+      openaiKeyPresent:hasOpenAIKey
+    },
     pipeline:{
       trend:"ready",
       rights:"ready",
       ingest:"ready",
-      transcription:process.env.OPENAI_API_KEY?"configured":"needs_key",
+      transcription:hasOpenAIKey?"configured":"needs_key",
       ranking:"ready",
       rendering:"ready"
     }
