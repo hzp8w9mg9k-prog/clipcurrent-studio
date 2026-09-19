@@ -1,0 +1,9 @@
+{
+  "name": "ClipCurrent Studio",
+  "short_name": "ClipCurrent",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070a10",
+  "theme_color": "#070a10",
+  "description": "Instagram movie Reel workflow studio"
+}
