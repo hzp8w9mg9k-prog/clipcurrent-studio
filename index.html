@@ -28,8 +28,8 @@ main{max-width:980px;margin:auto;padding:18px}.top,.account,.budgettop{display:f
   </section>
 
   <section id="freeModePanel" class="card">
-    <div class="account"><div><h2 style="margin:0">Free Auto-Pick</h2><div class="tiny">Search YouTube and let ClipCurrent rank the best candidates.</div></div><span class="badgefree">FREE MODE</span></div>
-<div class="field"><label>What should ClipCurrent look for?</label><input id="freeSearch" placeholder="Example: new horror movie trailer, intense movie scenes"></div>
+    <div class="account"><div><h2 style="margin:0">Free Auto-Pick</h2><div class="tiny">Search YouTube and let ClipCurrent choose the wildest, strongest candidates and build the whole Reel package.</div></div><span class="badgefree">FREE MODE</span></div>
+<div class="field"><label>What should ClipCurrent look for?</label><input id="freeSearch" placeholder="Example: wild movie moments, insane villain scenes, huge reveals"></div>
 <button id="freeDiscoverBtn" class="btn" style="margin-top:10px" onclick="discoverFree()">Find & Pick for Me</button>
 <div id="freeDiscoverStatus" class="tiny" style="margin-top:8px">Uses YouTube search. Gemini free-tier ranking turns on automatically once its free key is connected.</div>
 <div id="freeDiscoverResults" class="trendlist"></div>
@@ -91,13 +91,22 @@ async function discoverFree(){
   try{
     const r=await fetch("/api/free-discover?q="+encodeURIComponent(q),{cache:"no-store"}); const data=await r.json();
     if(!r.ok||!data.ok) throw new Error(data.error||"Discovery failed");
-    status.textContent=(data.chooser==="gemini-free"?"Gemini free-tier ranking":"Fallback ranking")+" • top "+data.items.length+" candidates";
+    status.textContent=(data.chooser==="gemini-free"?"Gemini free-tier ranking + full post package":"Fallback ranking + starter post package")+" • top "+data.items.length+" candidates";
     for(const x of data.items){
       const card=document.createElement("div");card.className="trend";
       const h=document.createElement("h3");h.textContent=x.title;card.appendChild(h);
       const meta=document.createElement("div");meta.className="tiny";meta.textContent=x.channel+" • "+Number(x.views||0).toLocaleString()+" views";card.appendChild(meta);
       const reason=document.createElement("p");reason.className="tiny";reason.textContent=x.reason;card.appendChild(reason);
-      const a=document.createElement("a");a.className="toolbtn";a.href=x.url;a.target="_blank";a.rel="noopener";a.textContent="Open YouTube";card.appendChild(a);
+      if(x.package){
+        const pkg=document.createElement("div");pkg.className="box";pkg.style.marginTop="9px";
+        const title=document.createElement("div");title.innerHTML="<b>Reel title:</b> "+escapeHtml(x.package.reelTitle||"");pkg.appendChild(title);
+        const hook=document.createElement("div");hook.className="tiny";hook.style.marginTop="5px";hook.innerHTML="<b>Hook:</b> "+escapeHtml(x.package.hook||"");pkg.appendChild(hook);
+        const desc=document.createElement("div");desc.className="tiny";desc.style.marginTop="5px";desc.innerHTML="<b>Description:</b> "+escapeHtml(x.package.description||"");pkg.appendChild(desc);
+        const tags=document.createElement("div");tags.className="tiny";tags.style.marginTop="5px";tags.innerHTML="<b>Hashtags:</b> "+escapeHtml((x.package.hashtags||[]).join(" "));pkg.appendChild(tags);
+        const edit=document.createElement("div");edit.className="tiny";edit.style.marginTop="5px";edit.innerHTML="<b>Edit angle:</b> "+escapeHtml(x.package.editAngle||"");pkg.appendChild(edit);
+        card.appendChild(pkg);
+      }
+      const a=document.createElement("a");a.className="toolbtn";a.style.marginTop="9px";a.href=x.url;a.target="_blank";a.rel="noopener";a.textContent="Open YouTube";card.appendChild(a);
       const use=document.createElement("button");use.className="btn";use.style.marginTop="8px";use.textContent="Use This Candidate";
       use.onclick=()=>useCandidate(x);card.appendChild(use);
       const rights=document.createElement("div");rights.className="rights";rights.textContent="⚠ Discovery link only — rights/source check required before reuse.";card.appendChild(rights);
@@ -107,9 +116,10 @@ async function discoverFree(){
   finally{btn.disabled=false;btn.textContent="Find & Pick for Me";}
 }
 function useCandidate(x){
-  document.getElementById("freeTitle").value=x.title||"";
-  document.getElementById("freeIdea").value="Selected from YouTube discovery: "+(x.url||"");
-  document.getElementById("freeCaption").value="Candidate reason: "+(x.reason||"");
+  const p=x.package||{};
+  document.getElementById("freeTitle").value=p.reelTitle||x.title||"";
+  document.getElementById("freeIdea").value=(p.hook?("HOOK: "+p.hook+"\n\n"):"")+(p.editAngle?("EDIT ANGLE: "+p.editAngle+"\n\n"):"")+"SOURCE: "+(x.url||"");
+  document.getElementById("freeCaption").value=(p.description||x.reason||"")+(Array.isArray(p.hashtags)&&p.hashtags.length?("\n\n"+p.hashtags.join(" ")):"");
   document.getElementById("freeTitle").scrollIntoView({behavior:"smooth",block:"center"});
 }
 function previewFreeFile(input){
