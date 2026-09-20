@@ -28,11 +28,19 @@ main{max-width:980px;margin:auto;padding:18px}.top,.account,.budgettop{display:f
   </section>
 
   <section id="freeModePanel" class="card">
-    <div class="account"><div><h2 style="margin:0">Free Auto-Pick</h2><div class="tiny">Search YouTube and let ClipCurrent choose the wildest, strongest candidates and build the whole Reel package.</div></div><span class="badgefree">FREE MODE</span></div>
-<div class="field"><label>What should ClipCurrent look for?</label><input id="freeSearch" placeholder="Example: wild movie moments, insane villain scenes, huge reveals"></div>
-<button id="freeDiscoverBtn" class="btn" style="margin-top:10px" onclick="discoverFree()">Find & Pick for Me</button>
-<div id="freeDiscoverStatus" class="tiny" style="margin-top:8px">Uses YouTube search. Gemini free-tier ranking turns on automatically once its free key is connected.</div>
-<div id="freeDiscoverResults" class="trendlist"></div>
+    <div class="account"><div><h2 style="margin:0">No-Card Scout</h2><div class="tiny">Free mode with no API key and no payment information.</div></div><span class="badgefree">NO CARD</span></div>
+<div class="tiny" style="margin-top:8px">YouTube no longer supports free search-query embeds, so this mode watches known movie sources instead of pretending it can search all of YouTube. Pick a source below, then paste the video link/title and ClipCurrent builds the post package locally.</div>
+<div class="grid" style="margin-top:12px">
+  <div class="box"><b>Universal Pictures</b><div class="tiny">Official trailers, clips and iconic moments.</div><a class="toolbtn" style="margin-top:8px" href="https://www.youtube.com/@UniversalPictures/videos" target="_blank" rel="noopener">Open Channel</a></div>
+  <div class="box"><b>Rotten Tomatoes Trailers</b><div class="tiny">New trailers and weekly movie roundups.</div><a class="toolbtn" style="margin-top:8px" href="https://www.youtube.com/@RottenTomatoesTRAILERS/videos" target="_blank" rel="noopener">Open Channel</a></div>
+  <div class="box"><b>Movieclips</b><div class="tiny">Movie scenes and memorable moments.</div><a class="toolbtn" style="margin-top:8px" href="https://www.youtube.com/@MOVIECLIPS/videos" target="_blank" rel="noopener">Open Channel</a></div>
+  <div class="box"><b>Warner Bros. Pictures</b><div class="tiny">Official trailers and studio videos.</div><a class="toolbtn" style="margin-top:8px" href="https://www.youtube.com/@WarnerBrosPictures/videos" target="_blank" rel="noopener">Open Channel</a></div>
+</div>
+<div class="field"><label>YouTube video link</label><input id="noCardUrl" placeholder="Paste the YouTube link you picked"></div>
+<div class="field"><label>Video/movie title</label><input id="noCardSourceTitle" placeholder="Paste or type the title"></div>
+<div class="field"><label>Moment type</label><select id="noCardMoment"><option value="wild reveal">Wild reveal</option><option value="villain moment">Villain moment</option><option value="fight or chase">Fight / chase</option><option value="emotional scene">Emotional scene</option><option value="funny moment">Funny moment</option><option value="iconic scene">Iconic scene</option><option value="trailer moment">Trailer moment</option></select></div>
+<button class="btn" style="margin-top:10px" onclick="buildNoCardPackage()">Build Full Reel Package</button>
+<div id="noCardPreview" class="box" style="margin-top:12px;display:none"></div>
 <hr style="border:0;border-top:1px solid #1d293d;margin:18px 0">
 <div class="account"><div><h2 style="margin:0">Manual Reel Builder</h2><div class="tiny">Or add your own approved source.</div></div></div>
     <div class="field"><label>Movie / scene idea</label><input id="freeTitle" placeholder="Example: best villain entrance"></div>
@@ -81,39 +89,48 @@ function setMode(mode){
   document.getElementById("aiBudgetCard").style.display=free?"none":"block";
   document.getElementById("aiTrendCard").style.display=free?"none":"block";
   document.getElementById("modeNote").textContent=free
-    ?"Free Mode is active. You choose the idea/source; ClipCurrent organizes the job and hands it to a free editor."
+    ?"Free Mode is active with no API key or payment information. Pick from curated movie sources, then ClipCurrent builds the full post package locally."
     :"AI Mode is active. Live Trend Scout requires OpenAI API credits.";
 }
-async function discoverFree(){
-  const q=document.getElementById("freeSearch").value.trim()||"movie trailers scenes";
-  const btn=document.getElementById("freeDiscoverBtn"),status=document.getElementById("freeDiscoverStatus"),list=document.getElementById("freeDiscoverResults");
-  btn.disabled=true;btn.textContent="Searching…";status.textContent="Searching YouTube and ranking candidates…";list.innerHTML="";
-  try{
-    const r=await fetch("/api/free-discover?q="+encodeURIComponent(q),{cache:"no-store"}); const data=await r.json();
-    if(!r.ok||!data.ok) throw new Error(data.error||"Discovery failed");
-    status.textContent=(data.chooser==="gemini-free"?"Gemini free-tier ranking + full post package":"Fallback ranking + starter post package")+" • top "+data.items.length+" candidates";
-    for(const x of data.items){
-      const card=document.createElement("div");card.className="trend";
-      const h=document.createElement("h3");h.textContent=x.title;card.appendChild(h);
-      const meta=document.createElement("div");meta.className="tiny";meta.textContent=x.channel+" • "+Number(x.views||0).toLocaleString()+" views";card.appendChild(meta);
-      const reason=document.createElement("p");reason.className="tiny";reason.textContent=x.reason;card.appendChild(reason);
-      if(x.package){
-        const pkg=document.createElement("div");pkg.className="box";pkg.style.marginTop="9px";
-        const title=document.createElement("div");title.innerHTML="<b>Reel title:</b> "+escapeHtml(x.package.reelTitle||"");pkg.appendChild(title);
-        const hook=document.createElement("div");hook.className="tiny";hook.style.marginTop="5px";hook.innerHTML="<b>Hook:</b> "+escapeHtml(x.package.hook||"");pkg.appendChild(hook);
-        const desc=document.createElement("div");desc.className="tiny";desc.style.marginTop="5px";desc.innerHTML="<b>Description:</b> "+escapeHtml(x.package.description||"");pkg.appendChild(desc);
-        const tags=document.createElement("div");tags.className="tiny";tags.style.marginTop="5px";tags.innerHTML="<b>Hashtags:</b> "+escapeHtml((x.package.hashtags||[]).join(" "));pkg.appendChild(tags);
-        const edit=document.createElement("div");edit.className="tiny";edit.style.marginTop="5px";edit.innerHTML="<b>Edit angle:</b> "+escapeHtml(x.package.editAngle||"");pkg.appendChild(edit);
-        card.appendChild(pkg);
-      }
-      const a=document.createElement("a");a.className="toolbtn";a.style.marginTop="9px";a.href=x.url;a.target="_blank";a.rel="noopener";a.textContent="Open YouTube";card.appendChild(a);
-      const use=document.createElement("button");use.className="btn";use.style.marginTop="8px";use.textContent="Use This Candidate";
-      use.onclick=()=>useCandidate(x);card.appendChild(use);
-      const rights=document.createElement("div");rights.className="rights";rights.textContent="⚠ Discovery link only — rights/source check required before reuse.";card.appendChild(rights);
-      list.appendChild(card);
-    }
-  }catch(e){status.innerHTML='<span class="error">'+escapeHtml(e.message)+'</span>';}
-  finally{btn.disabled=false;btn.textContent="Find & Pick for Me";}
+function buildNoCardPackage(){
+  const url=document.getElementById("noCardUrl").value.trim();
+  const source=document.getElementById("noCardSourceTitle").value.trim()||"this movie moment";
+  const moment=document.getElementById("noCardMoment").value;
+  if(!url){alert("Paste the YouTube video link first.");return;}
+  const titleMap={
+    "wild reveal":"You Won’t See This Reveal Coming",
+    "villain moment":"This Villain Moment Changes Everything",
+    "fight or chase":"This Scene Goes From 0 to 100",
+    "emotional scene":"This Scene Hits Harder Than Expected",
+    "funny moment":"This Movie Moment Is Way Too Good",
+    "iconic scene":"One of the Most Iconic Movie Moments",
+    "trailer moment":"This Trailer Moment Has Everyone Talking"
+  };
+  const hookMap={
+    "wild reveal":"Wait for the moment everything flips.",
+    "villain moment":"The second this happens, the whole scene changes.",
+    "fight or chase":"This escalates ridiculously fast.",
+    "emotional scene":"You can feel the entire scene shift here.",
+    "funny moment":"The timing on this is unreal.",
+    "iconic scene":"There’s a reason people still remember this scene.",
+    "trailer moment":"This is the moment that sells the whole movie."
+  };
+  const reelTitle=titleMap[moment]||"This Movie Moment Is Wild";
+  const hook=hookMap[moment]||"Wait for this moment.";
+  const description=hook+" "+source+" delivers one of those moments that instantly grabs your attention.";
+  const hashtags=["#movies","#movieclips","#cinema","#reels","#viral"];
+  const editAngle="Open directly on the strongest visual or reaction, cut dead space, keep the payoff early, use large readable captions, and end before the energy drops.";
+  const p=document.getElementById("noCardPreview");
+  p.style.display="block";
+  p.innerHTML="<b>"+escapeHtml(reelTitle)+"</b><div class='tiny' style='margin-top:6px'><b>Hook:</b> "+escapeHtml(hook)+"</div><div class='tiny' style='margin-top:5px'><b>Description:</b> "+escapeHtml(description)+"</div><div class='tiny' style='margin-top:5px'><b>Hashtags:</b> "+escapeHtml(hashtags.join(" "))+"</div><div class='tiny' style='margin-top:5px'><b>Edit angle:</b> "+escapeHtml(editAngle)+"</div><button class='btn' style='margin-top:9px' onclick='useNoCardPackage()'>Use This Package</button>";
+  window.noCardPackage={url,source,reelTitle,hook,description,hashtags,editAngle};
+}
+function useNoCardPackage(){
+  const p=window.noCardPackage;if(!p)return;
+  document.getElementById("freeTitle").value=p.reelTitle;
+  document.getElementById("freeIdea").value="HOOK: "+p.hook+"\n\nEDIT ANGLE: "+p.editAngle+"\n\nSOURCE: "+p.url;
+  document.getElementById("freeCaption").value=p.description+"\n\n"+p.hashtags.join(" ");
+  document.getElementById("freeTitle").scrollIntoView({behavior:"smooth",block:"center"});
 }
 function useCandidate(x){
   const p=x.package||{};
