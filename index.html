@@ -39,7 +39,12 @@ main{max-width:980px;margin:auto;padding:18px}.top,.account,.budgettop{display:f
       <a class="toolbtn" href="https://www.capcut.com/tools/auto-video-editor" target="_blank" rel="noopener">Open CapCut</a>
     </div>
     <div class="tiny" style="margin-top:10px">ClipCurrent cannot automatically pass a local iPhone video into those websites, so you’ll choose the same approved file there. The queue below remembers what you planned.</div>
-    <div id="freeQueue" style="margin-top:12px"></div>
+    <div class="freegrid" style="margin-top:12px">
+    <button class="toolbtn" type="button" onclick="exportFreeData()">Export Backup</button>
+    <label class="toolbtn" style="cursor:pointer">Import Backup<input id="importBackup" type="file" accept="application/json,.json" hidden onchange="importFreeData(this)"></label>
+  </div>
+  <div class="tiny" style="margin-top:8px">Backup includes your Free Mode Reel queue and statuses. It does not include the actual video files.</div>
+  <div id="freeQueue" style="margin-top:12px"></div>
   </section>
 
   <section id="aiBudgetCard" class="card">
@@ -105,6 +110,25 @@ function addFreeJob(){
 }
 function setJobStatus(i,status){const q=getFreeQueue();if(!q[i])return;q[i].status=status;localStorage.setItem("clipcurrentFreeQueue",JSON.stringify(q));renderFreeQueue();}
 function removeFreeJob(i){const q=getFreeQueue();q.splice(i,1);localStorage.setItem("clipcurrentFreeQueue",JSON.stringify(q));renderFreeQueue();}
+function exportFreeData(){
+  const payload={app:"ClipCurrent Studio",version:1,exportedAt:new Date().toISOString(),queue:getFreeQueue(),mode:currentMode(),monthlyBudget:getBudget()};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download="clipcurrent-backup-"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+}
+async function importFreeData(input){
+  const file=input.files&&input.files[0]; if(!file)return;
+  try{
+    const data=JSON.parse(await file.text());
+    if(data.app!=="ClipCurrent Studio"||!Array.isArray(data.queue)) throw new Error("That file is not a valid ClipCurrent backup.");
+    localStorage.setItem("clipcurrentFreeQueue",JSON.stringify(data.queue.slice(0,100)));
+    if(data.mode==="free"||data.mode==="ai") localStorage.setItem("clipcurrentMode",data.mode);
+    if(Number.isFinite(Number(data.monthlyBudget))&&Number(data.monthlyBudget)>0) localStorage.setItem("clipcurrentMonthlyBudget",String(Number(data.monthlyBudget)));
+    setMode(currentMode());renderBudget();renderFreeQueue();alert("ClipCurrent backup restored.");
+  }catch(e){alert(e.message||"Could not import that backup.");}
+  finally{input.value="";}
+}
 const storageKey=()=> "clipcurrentCost-"+monthKey();
 function getSpent(){return Number(localStorage.getItem(storageKey())||0)}
 function getBudget(){return Number(localStorage.getItem("clipcurrentMonthlyBudget")||15)}
