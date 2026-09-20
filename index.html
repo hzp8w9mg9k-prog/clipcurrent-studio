@@ -28,7 +28,13 @@ main{max-width:980px;margin:auto;padding:18px}.top,.account,.budgettop{display:f
   </section>
 
   <section id="freeModePanel" class="card">
-    <div class="account"><div><h2 style="margin:0">Free Reel Builder</h2><div class="tiny">No OpenAI credits required.</div></div><span class="badgefree">FREE MODE</span></div>
+    <div class="account"><div><h2 style="margin:0">Free Auto-Pick</h2><div class="tiny">Search YouTube and let ClipCurrent rank the best candidates.</div></div><span class="badgefree">FREE MODE</span></div>
+<div class="field"><label>What should ClipCurrent look for?</label><input id="freeSearch" placeholder="Example: new horror movie trailer, intense movie scenes"></div>
+<button id="freeDiscoverBtn" class="btn" style="margin-top:10px" onclick="discoverFree()">Find & Pick for Me</button>
+<div id="freeDiscoverStatus" class="tiny" style="margin-top:8px">Uses YouTube search. Gemini free-tier ranking turns on automatically once its free key is connected.</div>
+<div id="freeDiscoverResults" class="trendlist"></div>
+<hr style="border:0;border-top:1px solid #1d293d;margin:18px 0">
+<div class="account"><div><h2 style="margin:0">Manual Reel Builder</h2><div class="tiny">Or add your own approved source.</div></div></div>
     <div class="field"><label>Movie / scene idea</label><input id="freeTitle" placeholder="Example: best villain entrance"></div>
     <div class="field"><label>What should the Reel focus on?</label><textarea id="freeIdea" placeholder="Example: 15-second dramatic reveal with a strong first-frame hook"></textarea></div><div class="field"><label>Caption / notes</label><textarea id="freeCaption" placeholder="Optional caption, hook, hashtags, or edit notes"></textarea></div>
     <div class="field"><label>Approved video source from your phone</label><input id="freeFile" type="file" accept="video/*" onchange="previewFreeFile(this)"></div>
@@ -77,6 +83,34 @@ function setMode(mode){
   document.getElementById("modeNote").textContent=free
     ?"Free Mode is active. You choose the idea/source; ClipCurrent organizes the job and hands it to a free editor."
     :"AI Mode is active. Live Trend Scout requires OpenAI API credits.";
+}
+async function discoverFree(){
+  const q=document.getElementById("freeSearch").value.trim()||"movie trailers scenes";
+  const btn=document.getElementById("freeDiscoverBtn"),status=document.getElementById("freeDiscoverStatus"),list=document.getElementById("freeDiscoverResults");
+  btn.disabled=true;btn.textContent="Searching…";status.textContent="Searching YouTube and ranking candidates…";list.innerHTML="";
+  try{
+    const r=await fetch("/api/free-discover?q="+encodeURIComponent(q),{cache:"no-store"}); const data=await r.json();
+    if(!r.ok||!data.ok) throw new Error(data.error||"Discovery failed");
+    status.textContent=(data.chooser==="gemini-free"?"Gemini free-tier ranking":"Fallback ranking")+" • top "+data.items.length+" candidates";
+    for(const x of data.items){
+      const card=document.createElement("div");card.className="trend";
+      const h=document.createElement("h3");h.textContent=x.title;card.appendChild(h);
+      const meta=document.createElement("div");meta.className="tiny";meta.textContent=x.channel+" • "+Number(x.views||0).toLocaleString()+" views";card.appendChild(meta);
+      const reason=document.createElement("p");reason.className="tiny";reason.textContent=x.reason;card.appendChild(reason);
+      const a=document.createElement("a");a.className="toolbtn";a.href=x.url;a.target="_blank";a.rel="noopener";a.textContent="Open YouTube";card.appendChild(a);
+      const use=document.createElement("button");use.className="btn";use.style.marginTop="8px";use.textContent="Use This Candidate";
+      use.onclick=()=>useCandidate(x);card.appendChild(use);
+      const rights=document.createElement("div");rights.className="rights";rights.textContent="⚠ Discovery link only — rights/source check required before reuse.";card.appendChild(rights);
+      list.appendChild(card);
+    }
+  }catch(e){status.innerHTML='<span class="error">'+escapeHtml(e.message)+'</span>';}
+  finally{btn.disabled=false;btn.textContent="Find & Pick for Me";}
+}
+function useCandidate(x){
+  document.getElementById("freeTitle").value=x.title||"";
+  document.getElementById("freeIdea").value="Selected from YouTube discovery: "+(x.url||"");
+  document.getElementById("freeCaption").value="Candidate reason: "+(x.reason||"");
+  document.getElementById("freeTitle").scrollIntoView({behavior:"smooth",block:"center"});
 }
 function previewFreeFile(input){
   const file=input.files&&input.files[0]; if(!file)return;
